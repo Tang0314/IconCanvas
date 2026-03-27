@@ -1,0 +1,32 @@
+# Build directories
+build/
+out/
+cmake-build-*/
+
+# Qt generated
+*.pro.user
+*.qmake.stash
+moc_*.cpp
+qrc_*.cpp
+ui_*.h
+
+# CMake
+CMakeFiles/
+CMakeCache.txt
+cmake_install.cmake
+Makefile
+*.cmake
+!CMakeLists.txt
+
+# MSVC / Qt Creator
+*.user
+*.suo
+.vs/
+Debug/
+Release/
+.qtc_clangd/
+
+# Binary
+*.exe
+*.obj
+*.pdb
