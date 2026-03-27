@@ -10,6 +10,14 @@ public:
 
     QColor foreColor() const { return m_fore; }
     QColor backColor() const { return m_back; }
+    void swapColors() {
+        std::swap(m_fore, m_back);
+        emit foreColorChanged(m_fore);
+        emit backColorChanged(m_back);
+        update();
+    }
+
+    void openColorDialog();
 
 signals:
     void foreColorChanged(const QColor &c);
@@ -22,9 +30,7 @@ protected:
 
 private:
     QColor colorAt(const QPoint &pos) const;
-
     QColor m_fore = Qt::black;
     QColor m_back = Qt::white;
-
     static const QList<QColor> s_palette;
 };

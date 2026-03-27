@@ -17,6 +17,7 @@ public:
 private:
     void setupUI();
     void setupMenuBar();
+    void setupShortcuts();
     void newCanvas(int w, int h);
     void openFile();
     void saveFile();

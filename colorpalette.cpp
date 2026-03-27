@@ -116,3 +116,13 @@ QColor ColorPalette::colorAt(const QPoint &pos) const
     }
     return QColor();
 }
+
+void ColorPalette::openColorDialog()
+{
+    QColor c = QColorDialog::getColor(m_fore, this, "Select Foreground Color",
+                                      QColorDialog::ShowAlphaChannel);
+    if (!c.isValid()) return;
+    m_fore = c;
+    emit foreColorChanged(c);
+    update();
+}

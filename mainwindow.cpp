@@ -4,7 +4,7 @@
 #include <QDockWidget>
 #include <QFileDialog>
 #include <QMessageBox>
-#include <QInputDialog>
+#include <QShortcut>
 
 MainWindow::MainWindow(QWidget *parent)
     : QMainWindow(parent)
@@ -13,17 +13,16 @@ MainWindow::MainWindow(QWidget *parent)
     resize(900, 650);
     setupUI();
     setupMenuBar();
+    setupShortcuts();
 }
 
 MainWindow::~MainWindow() {}
 
 void MainWindow::setupUI()
 {
-    // 撤销栈
     m_undoStack = new QUndoStack(this);
     m_undoStack->setUndoLimit(64);
 
-    // 画布
     m_canvas = new CanvasWidget(32, 32, m_undoStack, this);
     QScrollArea *scroll = new QScrollArea(this);
     scroll->setWidget(m_canvas);
@@ -31,7 +30,6 @@ void MainWindow::setupUI()
     scroll->setBackgroundRole(QPalette::Dark);
     setCentralWidget(scroll);
 
-    // 颜色面板
     m_palette = new ColorPalette(this);
     QDockWidget *palDock = new QDockWidget("Colors", this);
     palDock->setWidget(m_palette);
@@ -39,11 +37,15 @@ void MainWindow::setupUI()
     palDock->setFeatures(QDockWidget::NoDockWidgetFeatures);
     addDockWidget(Qt::LeftDockWidgetArea, palDock);
 
-    // 状态栏
-    m_statusLabel = new QLabel("Ready", this);
+    // 状态栏：坐标 + 快捷键提示
+    m_statusLabel = new QLabel("X: -  Y: -", this);
+    QLabel *hintLabel = new QLabel(
+        "  |  Ctrl+N: New  Ctrl+O: Open  Ctrl+S: Save  "
+        "Ctrl+Z: Undo  Ctrl+Y: Redo  X: Swap  F: Custom Color", this);
+    hintLabel->setStyleSheet("color: gray; font-size: 11px;");
     statusBar()->addWidget(m_statusLabel);
+    statusBar()->addWidget(hintLabel);
 
-    // 信号连接
     connect(m_palette, &ColorPalette::foreColorChanged,
             m_canvas,  &CanvasWidget::setForeColor);
     connect(m_palette, &ColorPalette::backColorChanged,
@@ -56,18 +58,21 @@ void MainWindow::setupUI()
 
 void MainWindow::setupMenuBar()
 {
-    // File
     QMenu *fileMenu = menuBar()->addMenu("File");
-    fileMenu->addAction("New 16x16",  this, [this](){ newCanvas(16,16);  });
-    fileMenu->addAction("New 32x32",  this, [this](){ newCanvas(32,32);  });
-    fileMenu->addAction("New 48x48",  this, [this](){ newCanvas(48,48);  });
+    fileMenu->addAction("New 16x16",  this, [this](){ newCanvas(16,16); });
+    fileMenu->addAction("New 32x32",  this, [this](){ newCanvas(32,32); });
+    fileMenu->addAction("New 48x48",  this, [this](){ newCanvas(48,48); });
     fileMenu->addSeparator();
-    fileMenu->addAction("Open...", this, &MainWindow::openFile);
-    fileMenu->addAction("Save...", this, &MainWindow::saveFile);
+    QAction *openAct = fileMenu->addAction("Open...", this, &MainWindow::openFile);
+    openAct->setShortcut(QKeySequence::Open);
+    QAction *saveAct = fileMenu->addAction("Save...", this, &MainWindow::saveFile);
+    saveAct->setShortcut(QKeySequence::Save);
+    QAction *newAct  = fileMenu->addAction("New 32x32 (Ctrl+N)",
+                                          this, [this](){ newCanvas(32,32); });
+    newAct->setShortcut(QKeySequence::New);
     fileMenu->addSeparator();
     fileMenu->addAction("Exit", this, &QWidget::close);
 
-    // Edit
     QMenu *editMenu = menuBar()->addMenu("Edit");
     QAction *undoAct = m_undoStack->createUndoAction(this, "Undo");
     QAction *redoAct = m_undoStack->createRedoAction(this, "Redo");
@@ -76,12 +81,33 @@ void MainWindow::setupMenuBar()
     editMenu->addAction(undoAct);
     editMenu->addAction(redoAct);
 
-    // View
     QMenu *viewMenu = menuBar()->addMenu("View");
     viewMenu->addAction("Zoom 4x",  this, [this](){ m_canvas->setZoom(4);  });
     viewMenu->addAction("Zoom 8x",  this, [this](){ m_canvas->setZoom(8);  });
     viewMenu->addAction("Zoom 12x", this, [this](){ m_canvas->setZoom(12); });
     viewMenu->addAction("Zoom 16x", this, [this](){ m_canvas->setZoom(16); });
+}
+
+void MainWindow::setupShortcuts()
+{
+    // Ctrl+N 新建
+    new QShortcut(QKeySequence::New, this, [this](){ newCanvas(32,32); });
+
+    // Ctrl+S 保存
+    new QShortcut(QKeySequence::Save, this, [this](){ saveFile(); });
+
+    // Ctrl+O 打开
+    new QShortcut(QKeySequence::Open, this, [this](){ openFile(); });
+
+    // X 键 互换前景/背景色
+    new QShortcut(Qt::Key_X, this, [this](){
+        m_palette->swapColors();
+    });
+
+    // F 键 打开自定义颜色对话框
+    new QShortcut(Qt::Key_F, this, [this](){
+        m_palette->openColorDialog();
+    });
 }
 
 void MainWindow::newCanvas(int w, int h)
