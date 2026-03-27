@@ -1,6 +1,7 @@
 #pragma once
 #include <QWidget>
 #include <QColor>
+#include "translator.h"
 
 class ColorPalette : public QWidget
 {

@@ -16,6 +16,7 @@ qt_add_executable(IconCanvas
     canvaswidget.cpp
     colorpalette.h
     colorpalette.cpp
+    translator.h
 )
 
 target_link_libraries(IconCanvas PRIVATE Qt6::Widgets)

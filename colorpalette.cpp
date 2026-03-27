@@ -34,7 +34,8 @@ void ColorPalette::paintEvent(QPaintEvent *)
     // 互换箭头提示
     p.setPen(QColor(80,80,80));
     p.setFont(QFont("Arial", 8));
-    p.drawText(55, 30, "⇄");
+    p.drawText(60, 30, "⇄");
+    p.drawText(72, 30, T("X: Swap"));
 
     // 分割线
     p.setPen(QColor(200,200,200));
@@ -43,7 +44,7 @@ void ColorPalette::paintEvent(QPaintEvent *)
     // 调色板标题
     p.setPen(QColor(80,80,80));
     p.setFont(QFont("Arial", 8));
-    p.drawText(4, 76, "Colors (L=fore, R=back):");
+
 
     // 调色板格子
     const int cols = 4;
@@ -60,7 +61,7 @@ void ColorPalette::paintEvent(QPaintEvent *)
     // 双击自定义颜色提示
     p.setPen(QColor(120,120,120));
     p.setFont(QFont("Arial", 7));
-    p.drawText(4, 200, "Double-click: custom color");
+    p.drawText(4, 200, T("Double-click: custom color"));
 }
 
 void ColorPalette::mousePressEvent(QMouseEvent *e)
