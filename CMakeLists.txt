@@ -8,7 +8,6 @@ set(CMAKE_AUTORCC ON)
 
 find_package(Qt6 REQUIRED COMPONENTS Widgets)
 
-set(APP_ICON_RESOURCE "${CMAKE_CURRENT_SOURCE_DIR}/icon.ico")
 
 qt_add_executable(IconCanvas
     main.cpp
@@ -22,6 +21,7 @@ qt_add_executable(IconCanvas
     previewwidget.cpp
     translator.h
     app.qrc
+    app.rc
 )
 
 target_link_libraries(IconCanvas PRIVATE Qt6::Widgets)
