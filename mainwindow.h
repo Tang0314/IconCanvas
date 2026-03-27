@@ -7,6 +7,7 @@
 #include "canvaswidget.h"
 #include "colorpalette.h"
 #include "translator.h"
+#include "previewwidget.h"
 
 class MainWindow : public QMainWindow
 {
@@ -30,6 +31,7 @@ private:
     QLabel        *m_hintLabel;
     QUndoStack    *m_undoStack;
     QString        m_currentFile;
+    PreviewWidget *m_preview;
 
     // 菜单引用，切换语言时重建
     QMenuBar      *m_menuBar = nullptr;

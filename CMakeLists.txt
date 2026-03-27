@@ -8,6 +8,8 @@ set(CMAKE_AUTORCC ON)
 
 find_package(Qt6 REQUIRED COMPONENTS Widgets)
 
+set(APP_ICON_RESOURCE "${CMAKE_CURRENT_SOURCE_DIR}/icon.ico")
+
 qt_add_executable(IconCanvas
     main.cpp
     mainwindow.h
@@ -16,7 +18,16 @@ qt_add_executable(IconCanvas
     canvaswidget.cpp
     colorpalette.h
     colorpalette.cpp
+    previewwidget.h
+    previewwidget.cpp
     translator.h
+    app.qrc
 )
 
 target_link_libraries(IconCanvas PRIVATE Qt6::Widgets)
+
+set_target_properties(IconCanvas PROPERTIES
+    WIN32_EXECUTABLE TRUE
+)
+
+

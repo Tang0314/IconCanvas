@@ -67,11 +67,13 @@ private:
         m_zh["Failed to save file."] = "文件保存失败。";
         m_zh["Select Foreground Color"] = "选择前景色";
         // 窗口标题
-        m_zh["IconCanvas"]         = "图标画布";
+        m_zh["IconCanvas"]         = "IconCanvas";
         // 颜色面板
         m_zh["X: Swap"] = "X: 互换";
         m_zh["Double-click: custom color"] = "双击: 自定义颜色";
         m_zh["Colors"]                     = "颜色";
+        //预览区域
+        m_zh["Preview:"] = "预览:";
     }
 
     Language m_lang = English;

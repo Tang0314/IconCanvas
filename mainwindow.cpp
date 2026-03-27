@@ -5,6 +5,7 @@
 #include <QFileDialog>
 #include <QMessageBox>
 #include <QShortcut>
+#include <QVBoxLayout>
 
 MainWindow::MainWindow(QWidget *parent)
     : QMainWindow(parent)
@@ -31,8 +32,18 @@ void MainWindow::setupUI()
     setCentralWidget(scroll);
 
     m_palette = new ColorPalette(this);
+    m_preview = new PreviewWidget(this);
+
+    QWidget *leftPanel = new QWidget(this);
+    QVBoxLayout *leftLayout = new QVBoxLayout(leftPanel);
+    leftLayout->setContentsMargins(0, 0, 0, 0);
+    leftLayout->setSpacing(0);
+    leftLayout->addWidget(m_palette);
+    leftLayout->addWidget(m_preview);
+    leftLayout->addStretch();
+
     QDockWidget *palDock = new QDockWidget(T("Colors"), this);
-    palDock->setWidget(m_palette);
+    palDock->setWidget(leftPanel);
     palDock->setAllowedAreas(Qt::LeftDockWidgetArea);
     palDock->setFeatures(QDockWidget::NoDockWidgetFeatures);
     addDockWidget(Qt::LeftDockWidgetArea, palDock);
@@ -53,6 +64,14 @@ void MainWindow::setupUI()
             this, [this](int x, int y){
                 m_statusLabel->setText(QString("X: %1  Y: %2").arg(x).arg(y));
             });
+    // 画布变化时实时更新预览
+    connect(m_canvas, &CanvasWidget::imageChanged,
+            this, [this](){
+                m_preview->setImage(m_canvas->image());
+            });
+
+    // 初始化预览
+    m_preview->setImage(m_canvas->image());
 }
 
 void MainWindow::setupMenuBar()
@@ -105,6 +124,7 @@ void MainWindow::setupMenuBar()
         setupMenuBar();
         retranslateUI();
         m_palette->update();
+        m_preview->update();
     });
     // 当前语言打勾
     enAct->setCheckable(true);
