@@ -2,6 +2,8 @@
 #include <QMainWindow>
 #include <QLabel>
 #include <QScrollArea>
+#include <QUndoStack>
+#include <QFileInfo>
 #include "canvaswidget.h"
 #include "colorpalette.h"
 
@@ -15,8 +17,13 @@ public:
 private:
     void setupUI();
     void setupMenuBar();
+    void newCanvas(int w, int h);
+    void openFile();
+    void saveFile();
 
-    CanvasWidget   *m_canvas;
-    ColorPalette   *m_palette;
-    QLabel         *m_statusLabel;
+    CanvasWidget  *m_canvas;
+    ColorPalette  *m_palette;
+    QLabel        *m_statusLabel;
+    QUndoStack    *m_undoStack;
+    QString        m_currentFile;
 };

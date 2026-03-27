@@ -18,6 +18,7 @@ signals:
 protected:
     void paintEvent(QPaintEvent *) override;
     void mousePressEvent(QMouseEvent *) override;
+    void mouseDoubleClickEvent(QMouseEvent *) override;
 
 private:
     QColor colorAt(const QPoint &pos) const;
