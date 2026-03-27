@@ -1,14 +1,22 @@
-#ifndef MAINWINDOW_H
-#define MAINWINDOW_H
-
+#pragma once
 #include <QMainWindow>
+#include <QLabel>
+#include <QScrollArea>
+#include "canvaswidget.h"
+#include "colorpalette.h"
 
 class MainWindow : public QMainWindow
 {
     Q_OBJECT
-
 public:
-    MainWindow(QWidget *parent = nullptr);
+    explicit MainWindow(QWidget *parent = nullptr);
     ~MainWindow();
+
+private:
+    void setupUI();
+    void setupMenuBar();
+
+    CanvasWidget   *m_canvas;
+    ColorPalette   *m_palette;
+    QLabel         *m_statusLabel;
 };
-#endif // MAINWINDOW_H
